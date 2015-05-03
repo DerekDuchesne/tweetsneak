@@ -1,13 +1,19 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     </head>
     <body>
-        <h1>Example Project</h1>
-        <form action="" method="POST">
+        <div class="page-header" style="text-align:center;">
+            <h1>Tweet Sneak</h1>
+        </div>
+        <form action="" method="POST" style="text-align:center;">
             <input type="text" name="token" placeholder="Search something">
             <input type="submit" value="Search">
         </form>
     </body>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </html>
