@@ -6,7 +6,10 @@
     </head>
     <body>
         <div class="page-header" style="margin-left:20px;">
-            <h1>Search results for "{{ token }}"</h1>
+            <div class="row">
+                <h1 id="search_title">Search results for "{{ token }}"</h1>
+                <img id="logo_small" src="{{ url_for('static', filename='img/logo.png') }}">
+            </div>
         </div>
         <div class="tweet_container">
             <div class="row">

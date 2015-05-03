@@ -2,6 +2,30 @@ body{
 
 }
 
+#logo{
+    width:200px;
+    height:150px;
+    transition: transform 1s;
+    -webkit-transition: -webkit-transform 1s;
+}
+
+#logo_small{
+    width:100px;
+    height:75px;
+    float:left;
+    margin-left:50px;
+}
+
+#logo:hover{
+    transform:rotateY(180deg);
+    -webkit-transform:rotateY(180deg);
+}
+
+#search_title{
+    display:inline-block;
+    float:left;
+}
+
 .tweet_container{
     text-align:center;
     margin:20px;
