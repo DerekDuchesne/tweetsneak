@@ -1,9 +1,13 @@
 from flask import Flask, render_template, url_for, request, redirect
 from collections import Counter
 from twitter import *
-import json
-import math
-import sys
+import json, math, sys, datetime
+from google.appengine.ext import db
+
+class Query(db.Model):
+    query = db.StringProperty(required = True)
+    result = db.StringProperty(required = True)
+    timestamp = db.DateTimeProperty(required = True)
 
 app = Flask(__name__)
 app.config.from_pyfile("tweetsneak.py")
@@ -14,7 +18,6 @@ def index():
 
 @app.route("/search")
 def search():
-    #TODO: add token to datastore
     q = request.args.get("q")
     if q is None:
         q = ""
@@ -27,14 +30,20 @@ def search():
     else:
         tweets = t.search.tweets(q=q, count=app.config["MAX_TWEETS"])["statuses"]
     
-    transtab = dict((ord(char), None) for char in u"-=+|!@#$%^&*()`~[]{};:'\",<.>\\/?")
+    transtab = dict((ord(char), None) for char in u"-=+|!@#$%^&*()`~[]{};:'\",<.>\\/?") #trans table for removing punctuation
     word_list = Counter()
     
     for tweet in tweets:
         for word in tweet["text"].translate(transtab).split():
             word_list[word.lower()] += 1
-            
-    most_common = enumerate(word_list.most_common(10))
+    
+    most_common = word_list.most_common(10)
+    most_common_json = json.dumps(most_common)
+        
+    entity = Query(query=q, result=most_common_json, timestamp=datetime.datetime.utcnow())
+    entity.put()
+        
+    most_common = enumerate(most_common)
     num_pages = int(math.ceil(float(len(tweets)) / app.config["RPP"]))
     if num_pages == 0:
         num_pages = 1
