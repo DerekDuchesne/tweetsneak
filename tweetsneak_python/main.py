@@ -15,17 +15,17 @@ def index():
 @app.route("/search")
 def search():
     #TODO: add token to datastore
-    token = request.args.get("token")
-    if token is None:
-        token = ""
+    q = request.args.get("q")
+    if q is None:
+        q = ""
     
     BEARER_TOKEN = oauth2_dance(app.config["CONSUMER_KEY"], app.config["CONSUMER_SECRET"])
     t = Twitter(auth=OAuth2(bearer_token = BEARER_TOKEN))
     
-    if token == "":
+    if q == "":
         tweets = []
     else:
-        tweets = t.search.tweets(q=token, count=app.config["MAX_TWEETS"])["statuses"]
+        tweets = t.search.tweets(q=q, count=app.config["MAX_TWEETS"])["statuses"]
     
     transtab = dict((ord(char), None) for char in u"-=+|!@#$%^&*()`~[]{};:'\",<.>\\/?")
     word_list = Counter()
@@ -39,7 +39,7 @@ def search():
     if num_pages == 0:
         num_pages = 1
             
-    return render_template("search.html", token = token, tweets = map(json.dumps, tweets), most_common = most_common, rpp = app.config["RPP"], num_pages = num_pages)
+    return render_template("search.html", q = q, tweets = map(json.dumps, tweets), most_common = most_common, rpp = app.config["RPP"], num_pages = num_pages)
     
 @app.errorhandler(404)
 def notfound(e):

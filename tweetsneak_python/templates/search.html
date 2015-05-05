@@ -9,12 +9,12 @@
             <div class="container-fluid">
                 <a href="/">Back</a>
                 <form action="" method="GET" style="text-align:center;">
-                    <input type="text" name="token" placeholder="Search something else">
+                    <input type="text" name="q" placeholder="Search something else">
                     <input type="submit" value="Search">
                 </form>
                 <div class="row">
                     <div class="col-xs-9">
-                        <h1>Search results for "{{ token }}"</h1>
+                        <h1>Search results for "{{ q }}"</h1>
                     </div>
                     <div class="col-xs-3">
                         <img id="logo_small" src="{{ url_for('static', filename='img/logo.png') }}">
