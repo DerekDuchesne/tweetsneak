@@ -5,7 +5,7 @@ import json, math, sys, datetime
 from google.appengine.ext import db
 
 class Query(db.Model):
-    query = db.StringProperty(required = True)
+    query = db.StringProperty()
     result = db.StringProperty(required = True)
     timestamp = db.DateTimeProperty(required = True)
 
