@@ -8,21 +8,17 @@ import sys
 app = Flask(__name__)
 app.config.from_pyfile("tweetsneak.py")
 
-@app.route("/", methods = ["GET", "POST"])
+@app.route("/")
 def index():
-    if request.method == "POST":
-        token = request.form["token"]
-        return redirect(url_for("search", token=token))
     return render_template("index.html")
 
-@app.route("/search/", defaults={"token": ""}, methods = ["GET", "POST"])
-@app.route("/search/<token>", methods = ["GET", "POST"])    
-def search(token):
-    if request.method == "POST":
-        token = request.form["token"]
-        return redirect(url_for("search", token=token))
-        
+@app.route("/search")
+def search():
     #TODO: add token to datastore
+    token = request.args.get("token")
+    if token is None:
+        token = ""
+    
     BEARER_TOKEN = oauth2_dance(app.config["CONSUMER_KEY"], app.config["CONSUMER_SECRET"])
     t = Twitter(auth=OAuth2(bearer_token = BEARER_TOKEN))
     
