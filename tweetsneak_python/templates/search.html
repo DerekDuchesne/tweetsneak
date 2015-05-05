@@ -7,6 +7,11 @@
     <body>
         <div class="page-header" style="margin-left:20px;">
             <div class="container-fluid">
+                <a href="/">Back</a>
+                <form action="" method="POST" style="text-align:center;">
+                    <input type="text" name="token" placeholder="Search something else">
+                    <input type="submit" value="Search">
+                </form>
                 <div class="row">
                     <div class="col-xs-9">
                         <h1>Search results for "{{ token }}"</h1>
@@ -17,15 +22,61 @@
                 </div>
             </div>
         </div>
-        <div class="tweet_container">
-            <div class="row">
-                    {% for tweet in tweets %}
-                        <blockquote class="twitter-tweet"><p>{{ tweet.text }}</p>&mdash; {{ tweet.user.name }} (@{{ tweet.user.screen_name }}) {{ tweet.created_at }}</blockquote>
+        <div class="container-fluid">
+            <div class="row" style="text-align:center;">
+                    <h2>10 most common words</h2>
+                    {% for i, word in most_common %}
+                    <div class="common_word_block">
+                        <h3>{{ i+1 }}</h3>
+                        <p class="common_word">{{ word[0] }}</p>
+                        <p class="word_count">{{ word[1] }} time(s)</p>
+                    </div>
                     {% endfor %}
             </div>
         </div>
+        <div class="container-fluid">
+            <div class="row" style="text-align:center;">
+                <h3>Pages</h3>
+                {% for i in range(1, num_pages+1) %}
+                {% if i == 1 %}
+                <a class="page_num_selected" href="#">{{ i }}</a>
+                {% else %}
+                <a class="page_num" href="#">{{ i }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div id="tweet_container" class="row">
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+        <script>
+            $(document).on("click", ".page_num", function(e){
+                e.preventDefault();
+                $(".page_num_selected").attr("class", "page_num");
+                $(this).attr("class", "page_num_selected");
+                var num = parseInt($(this).html());
+                show_tweets(num);
+            });
+            
+            $(document).on("click", ".page_num_selected", function(e){
+                e.preventDefault();
+            });
+            
+            function show_tweets(page_num){
+                $("#tweet_container").html("");
+                var rpp = {{ rpp }};
+                var start_index = (page_num-1) * rpp;
+                var end_index = start_index + rpp;
+                var current_tweets = {{ tweets|safe }}.slice(start_index, end_index);
+                for(var i = 0; i < current_tweets.length; i++){
+                    var tweet = JSON.parse(current_tweets[i]);
+                    $("#tweet_container").append("<blockquote class='twitter-tweet'><p>" + tweet.text + "</p>&mdash;" + tweet.user.name + "(@" + tweet.user.screen_name + ")" + tweet.created_at + "</blockquote>");
+                }
+            }
+            
+            show_tweets(1);
+        </script>
     </body>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </html>

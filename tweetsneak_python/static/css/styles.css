@@ -2,11 +2,16 @@ body{
 
 }
 
+#title{
+    margin-bottom:20px;
+}
+
 #logo{
-    width:200px;
-    height:150px;
+    width:300px;
+    height:200px;
     transition: transform 1s;
     -webkit-transition: -webkit-transform 1s;
+    margin-bottom:20px;
 }
 
 #logo_small{
@@ -19,7 +24,40 @@ body{
     -webkit-transform:rotateY(180deg);
 }
 
-.tweet_container{
+#search_bar{
+    width:50%;
+    height:30px;
+}
+
+#submit_button{
+    height:30px;
+}
+
+.page_num{
+    font-size:22px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.page_num_selected{
+    text-decoration:underline;
+    font-size:26px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.common_word_block{
+    display:inline-block;
+    padding:20px;
+    border-bottom:1px solid #eee;
+    padding-bottom:9px;
+}
+
+.word_count{
+    font-size:12px;
+}
+
+#tweet_container{
     text-align:center;
     margin:20px;
 }
