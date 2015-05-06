@@ -25,11 +25,19 @@ def search():
     BEARER_TOKEN = oauth2_dance(app.config["CONSUMER_KEY"], app.config["CONSUMER_SECRET"])
     t = Twitter(auth=OAuth2(bearer_token = BEARER_TOKEN))
     
-    if q == "":
-        tweets = []
-    else:
-        tweets = t.search.tweets(q=q, count=app.config["MAX_TWEETS"])["statuses"]
+    tweets = []
+    max_id = 0
     
+    while len(tweets) < app.config["MAX_TWEETS"]:
+        try:
+            for tweet in iter(t.search.tweets(q=q, count=app.config["MAX_TWEETS"], max_id=max_id)["statuses"]):
+                tweets.append(tweet)
+            max_id = tweets[-1]["id"]
+        except TwitterHTTPError:
+            break
+        except IndexError:
+            break
+            
     transtab = dict((ord(char), None) for char in u"-=+|!@#$%^&*()`~[]{};:'\",<.>\\/?") #trans table for removing punctuation
     word_list = Counter()
     
