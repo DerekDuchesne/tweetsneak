@@ -32,7 +32,10 @@ def search():
         try:
             for tweet in iter(t.search.tweets(q=q, count=app.config["MAX_TWEETS"], max_id=max_id)["statuses"]):
                 tweets.append(tweet)
-            max_id = tweets[-1]["id"]
+            if max_id == tweets[-1]["id"]:
+                break
+            else:
+                max_id = tweets[-1]["id"]
         except TwitterHTTPError:
             break
         except IndexError:
